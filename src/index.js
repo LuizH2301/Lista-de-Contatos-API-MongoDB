@@ -3,17 +3,20 @@ import logMiddleware from "./middleware/logger.js";
 import { createUserService, getAllUsersService, getUserByIdService, updateUserService } from "./service/user.service.js";
 import { deleteUserService } from "./service/user.service.js";
 
+import { env } from "./config/env.config.js";
+
+ 
 import mongoose from "mongoose";
 
 
 const app = express();
 
-const port = 3000;
+const port = env.app_port || 3000;
 
 app.use(express.json());
 app.use(logMiddleware);
 
-mongoose.connect("mongodb+srv://luiz_henrique_93:luiz123@cluster0.1wqfuzi.mongodb.net/DbLions"); // mudar para sua URI de conexão com o MongoDB
+mongoose.connect (env.db_uri); // mudar para sua URI de conexão com o MongoDB
 
 mongoose.connection.on("error", (error) => {
   console.error("Erro de conexão com o MongoDB:", error);
@@ -85,5 +88,5 @@ app.delete("/contatos/:id", async (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server ${env.db_uri} is running on port ${port}`);
 });
